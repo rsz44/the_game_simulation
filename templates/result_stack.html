@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Result of {{ party_id }}</title>
+		
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+		
+		<script type="text/javascript">
+			AmCharts.makeChart("chartdiv",
+				{
+					"type": "serial",
+					"categoryField": "action",
+					"startDuration": 1,
+					"categoryAxis": {
+						"gridPosition": "start"
+					},
+					"trendLines": [],
+					"graphs": [
+						{% for stack in stacks %}
+						{
+							"balloonText": "[[title]] of [[category]]:[[value]]",
+							"id": "{{ stack.uid }}",
+							"title": "{{ 'Stack (' + stack.uid + ')' + stack.step[0] }}",
+							"valueField": "{{ stack.uid }}"
+						},
+						{% endfor %}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"title": "Stack lasts card Value"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"legend": {
+						"enabled": true,
+						"useGraphSettings": true
+					},
+					"titles": [
+						{
+							"id": "Title-1",
+							"size": 15,
+							"text": "Game#{{ party_id }} stacks last card value"
+						}
+					],
+					"dataProvider": {{ stack_stats|safe }}
+				}
+			);
+
+
+			AmCharts.makeChart("chartdiv2",
+				{
+					"type": "serial",
+					"categoryField": "action",
+					"startDuration": 1,
+					"categoryAxis": {
+						"gridPosition": "start"
+					},
+					"trendLines": [],
+					"graphs": [
+						{% for stack in stacks %}
+						{
+							"balloonText": "[[title]] of [[category]]:[[value]]",
+							"id": "{{ stack.uid }}",
+							"title": "{{ 'Stack (' + stack.uid + ')' + stack.step[0] }}",
+							"valueField": "{{ stack.uid }}"
+						},
+						{% endfor %}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"stackType": "regular",
+							"title": "Locked stacks"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"legend": {
+						"enabled": true,
+						"useGraphSettings": true
+					},
+					"titles": [
+						{
+							"id": "Title-1",
+							"size": 15,
+							"text": "Game#{{ party_id }} stacks locked by player"
+						}
+					],
+					"dataProvider": {{ stack_stats_locked|safe }}
+				}
+			);
+		</script>
+	</head>
+	<body>
+		<a href="/">BACK TO ALL RESULTS</a>
+		<hr>
+		<div id="chartdiv" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+		<div id="chartdiv2" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+	</body>
+</html>
